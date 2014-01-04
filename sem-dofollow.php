@@ -3,20 +3,19 @@
 Plugin Name: Do Follow
 Plugin URI: http://www.semiologic.com/software/dofollow/
 Description: Removes the <a href="http://www.semiologic.com/2005/02/05/prepare-for-more-comment-spam-not-less/">evil nofollow attribute</a> that WordPress adds in comments.
-Version: 4.0.2
+Version: 4.1
 Author: Denis de Bernardy, Mike Koepke
 Author URI: http://www.getsemiologic.com
 Text Domain: sem-dofollow
 Domain Path: /lang
+License: Dual licensed under the MIT and GPLv2 licenses
 */
 
 /*
 Terms of use
 ------------
 
-This software is copyright Mesoconcepts (http://www.mesoconcepts.com), and is distributed under the terms of the GPL license, v.2.
-
-http://www.opensource.org/licenses/gpl-2.0.php
+This software is copyright Denis de Bernardy & Mike Koepke, and is distributed under the terms of the MIT and GPLv2 licenses.
 
 
 Hat tips
@@ -26,47 +25,51 @@ Hat tips
 	* Thomas Parisot <http://oncle-tom.net>
 **/
 
+class sem_dofollow {
 
-/**
- * strip_nofollow()
- *
- * @param string $text
- * @return string $text
- **/
+	public function __construct() {
+		add_filter('get_comment_author_link', array($this, 'strip_nofollow'), 15);
+		add_filter('comment_text', array($this, 'strip_nofollow'), 15);
+		remove_filter('pre_comment_content', 'wp_rel_nofollow', 15);
+	}
 
-function strip_nofollow($text = '') {
-	return preg_replace_callback("/<\s*a\s+(.+?)>/is", 'strip_nofollow_callback', $text);
-} # strip_nofollow()
+	/**
+	 * strip_nofollow()
+	 *
+	 * @param string $text
+	 * @return string $text
+	 **/
 
-
-/**
- * strip_nofollow_callback()
- *
- * @param array $match
- * @return string $text
- **/
-
-function strip_nofollow_callback($match) {
-	$attr = $match[1];
-	$attr = " $attr ";
-	$attr = preg_replace("/
-		\s
-		rel\s*=\s*(['\"])
-		([^\\1]*?\s+)?
-		nofollow
-		(\s+[^\\1]*?)?
-		\\1
-		/ix", " rel=$1$2$3$1", $attr);
-	$attr = preg_replace("/
-		\s
-		rel\s*=\s*(['\"])\s*\\1
-		/ix", '', $attr);
-	$attr = trim($attr);
-	return '<a ' . $attr . '>';
-} # strip_nofollow_callback()
+	function strip_nofollow($text = '') {
+		return preg_replace_callback("/<\s*a\s+(.+?)>/is", array($this, 'strip_nofollow_callback'), $text);
+	} # strip_nofollow()
 
 
-add_filter('get_comment_author_link', 'strip_nofollow', 15);
-add_filter('comment_text', 'strip_nofollow', 15);
-remove_filter('pre_comment_content', 'wp_rel_nofollow', 15);
-?>
+	/**
+	 * strip_nofollow_callback()
+	 *
+	 * @param array $match
+	 * @return string $text
+	 **/
+
+	function strip_nofollow_callback($match) {
+		$attr = $match[1];
+		$attr = " $attr ";
+		$attr = preg_replace("/
+			\s
+			rel\s*=\s*(['\"])
+			([^\\1]*?\s+)?
+			nofollow
+			(\s+[^\\1]*?)?
+			\\1
+			/ix", " rel=$1$2$3$1", $attr);
+		$attr = preg_replace("/
+			\s
+			rel\s*=\s*(['\"])\s*\\1
+			/ix", '', $attr);
+		$attr = trim($attr);
+		return '<a ' . $attr . '>';
+	} # strip_nofollow_callback()
+}
+
+$sem_dofollow = new sem_dofollow();
