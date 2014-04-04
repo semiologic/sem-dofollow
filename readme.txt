@@ -30,6 +30,10 @@ If you require more dedicated assistance, consider using [Semiologic Pro](http:/
 
 == Change Log ==
 
+= 4.2 =
+
+- Code refactoring
+
 = 4.1 =
 
 - Refactored source code to object oriented implementation

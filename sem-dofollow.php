@@ -3,7 +3,7 @@
 Plugin Name: Do Follow
 Plugin URI: http://www.semiologic.com/software/dofollow/
 Description: Removes the <a href="http://www.semiologic.com/2005/02/05/prepare-for-more-comment-spam-not-less/">evil nofollow attribute</a> that WordPress adds in comments.
-Version: 4.1
+Version: 4.2 dev
 Author: Denis de Bernardy, Mike Koepke
 Author URI: http://www.getsemiologic.com
 Text Domain: sem-dofollow
@@ -25,9 +25,66 @@ Hat tips
 	* Thomas Parisot <http://oncle-tom.net>
 **/
 
+
 class sem_dofollow {
+	/**
+	 * Plugin instance.
+	 *
+	 * @see get_instance()
+	 * @type object
+	 */
+	protected static $instance = NULL;
+
+	/**
+	 * URL to this plugin's directory.
+	 *
+	 * @type string
+	 */
+	public $plugin_url = '';
+
+	/**
+	 * Path to this plugin's directory.
+	 *
+	 * @type string
+	 */
+	public $plugin_path = '';
+
+	/**
+	 * Access this plugin’s working instance
+	 *
+	 * @wp-hook plugins_loaded
+	 * @return  object of this class
+	 */
+	public static function get_instance()
+	{
+		NULL === self::$instance and self::$instance = new self;
+
+		return self::$instance;
+	}
+
+
+	/**
+	 * Constructor.
+	 *
+	 *
+	 */
 
 	public function __construct() {
+		$this->plugin_url    = plugins_url( '/', __FILE__ );
+		$this->plugin_path   = plugin_dir_path( __FILE__ );
+
+		add_action( 'plugins_loaded', array ( $this, 'init' ) );
+	}
+
+
+	/**
+	 * init()
+	 *
+	 * @return void
+	 **/
+
+	function init() {
+		// more stuff: register actions and filters
 		add_filter('get_comment_author_link', array($this, 'strip_nofollow'), 15);
 		add_filter('comment_text', array($this, 'strip_nofollow'), 15);
 		remove_filter('pre_comment_content', 'wp_rel_nofollow', 15);
@@ -70,6 +127,6 @@ class sem_dofollow {
 		$attr = trim($attr);
 		return '<a ' . $attr . '>';
 	} # strip_nofollow_callback()
-}
+} // sem_dofollow
 
-$sem_dofollow = new sem_dofollow();
+$sem_dofollow = sem_dofollow::get_instance();
