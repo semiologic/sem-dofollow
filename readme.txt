@@ -8,18 +8,16 @@ Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-The dofollow plugin for WordPress lets you remove the evil nofollow attribute from your comments. Because nofollow will not work.
-
+*Deprecated* -  The Dofollow plugin lets you remove the evil nofollow attribute from your comments. Because nofollow will not work.
 
 == Description ==
 
-The dofollow plugin for WordPress lets you remove the evil nofollow attribute from your comments. Because [nofollow will not work](http://www.semiologic.com/2005/02/05/prepare-for-more-comment-spam-not-less/).
+This plugin's functionality has been merged into the [External Links plugin](https://wordpress.org/plugins/sem-external-links/).
+As a result this plugin is now deprecated.  No further development will occur on it though it shouldn't have any issues in future WP releases.
+That is unless they change the default nofollow behavior.
 
-= Help Me! =
+The Dofollow plugin lets you remove the evil nofollow attribute from your comments. Because [nofollow will not work](http://www.semiologic.com/2005/02/05/prepare-for-more-comment-spam-not-less/).
 
-The [Semiologic forum](http://forum.semiologic.com) is the best place to report issues. Please note, however, that while community members and I do our best to answer all queries, we're assisting you on a voluntary basis.
-
-If you require more dedicated assistance, consider using [Semiologic Pro](http://www.getsemiologic.com).
 
 
 == Installation ==
@@ -29,6 +27,10 @@ If you require more dedicated assistance, consider using [Semiologic Pro](http:/
 
 
 == Change Log ==
+
+= 4.2.2 =
+
+- Retired/deprecated
 
 = 4.2.1 =
 
